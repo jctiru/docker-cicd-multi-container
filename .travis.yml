@@ -1,0 +1,19 @@
+services:
+  - docker
+
+before_install:
+  - docker build -t jctiru/react-test -f ./client/Dockerfile.dev ./client
+
+script:
+  - docker run -e CI=true jctiru/react-test npm run test -- --coverage
+
+after_success:
+  - docker build -t jctiru/multi-client ./client
+  - docker build -t jctiru/multi-nginx ./nginx
+  - docker build -t jctiru/multi-server ./server
+  - docker build -t jctiru/multi-worker ./worker
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  - docker push jctiru/multi-client
+  - docker push jctiru/multi-nginx
+  - docker push jctiru/multi-server
+  - docker push jctiru/multi-worker
