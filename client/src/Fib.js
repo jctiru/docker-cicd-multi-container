@@ -29,10 +29,6 @@ class Fib extends Component {
     this.setState({ seenIndexes: seenIndexes.data });
   }
 
-  renderSeenIndexes() {
-    return this.state.seenIndexes.map(({ number }) => number).join(", ");
-  }
-
   handleSubmit = async event => {
     event.preventDefault();
 
